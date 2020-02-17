@@ -1,0 +1,107 @@
+import React, { useCallback, useState } from 'react';
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import { ScrollView } from 'react-native';
+import {
+  launchListVariables as GetLaunchListVariables,
+  launchList as GetLaunchList,
+} from '../__generated__/launchList';
+import Loading from '../components/Loading';
+import LaunchTile from '../containers/LaunchTile';
+import { padding } from '../theme';
+import Header from '../containers/Header';
+import Button from '../components/Button';
+import { Centered, CenteredText } from '../components/Centered';
+
+export const LAUNCH_TILE_DATA = gql`
+  fragment LaunchTile on Launch {
+    id
+    isBooked
+    rocket {
+      id
+      name
+    }
+    mission {
+      name
+      missionPatch
+    }
+  }
+`;
+
+const GET_LAUNCHES = gql`
+  query launchList($after: String) {
+    launches(after: $after) {
+      cursor
+      hasMore
+      launches {
+        ...LaunchTile
+      }
+    }
+  }
+  ${LAUNCH_TILE_DATA}
+`;
+
+const Launches = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { data, loading, error, fetchMore } = useQuery<
+    GetLaunchList,
+    GetLaunchListVariables
+  >(GET_LAUNCHES);
+
+  const handleClick = useCallback(() => {
+    if (isLoading) {
+      return;
+    }
+    setIsLoading(true);
+    fetchMore({
+      variables: {
+        after: data.launches.cursor,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        setIsLoading(false);
+        if (!fetchMoreResult) return prev;
+        return {
+          ...fetchMoreResult,
+          launches: {
+            ...fetchMoreResult.launches,
+            launches: [
+              ...prev.launches.launches,
+              ...fetchMoreResult.launches.launches,
+            ],
+          },
+        };
+      },
+    });
+  }, [data, fetchMore, isLoading]);
+
+  if (loading)
+    return (
+      <Centered>
+        <Loading />
+      </Centered>
+    );
+  if (error) return <CenteredText>ERROR</CenteredText>;
+  if (!data) return <CenteredText>Not found</CenteredText>;
+
+  const {
+    launches: { launches, hasMore },
+  } = data;
+
+  return (
+    <>
+      <ScrollView style={{ padding }}>
+        <Header />
+        {launches.map(launch => (
+          <LaunchTile key={launch.id} launch={launch} />
+        ))}
+        {hasMore && (
+          <Button isLoading={isLoading} onPress={handleClick}>
+            Load More
+          </Button>
+        )}
+      </ScrollView>
+    </>
+  );
+};
+
+export default Launches;
