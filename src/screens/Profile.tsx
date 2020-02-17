@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { useQuery } from 'apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { Centered, CenteredText } from '../components/Centered';
 import LaunchTile from '../containers/LaunchTile';

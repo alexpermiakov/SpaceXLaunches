@@ -32,6 +32,7 @@ const Login = () => {
         <Loading />
       </Centered>
     );
+
   if (error) return <CenteredText>ERROR</CenteredText>;
 
   return <LoginForm login={login} />;

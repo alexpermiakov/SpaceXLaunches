@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { unit } from '../theme';
 
-const galaxy = require('../assets/images/galaxy.jpg');
-const iss = require('../assets/images/iss.jpg');
-const moon = require('../assets/images/moon.jpg');
+const galaxy = require('../../assets/images/galaxy.jpg');
+const iss = require('../../assets/images/iss.jpg');
+const moon = require('../../assets/images/moon.jpg');
 
 const backgrounds = [galaxy, iss, moon];
 

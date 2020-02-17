@@ -9,38 +9,43 @@ import { HttpLink } from 'apollo-link-http';
 import { AsyncStorage } from 'react-native';
 import gql from 'graphql-tag';
 import Launches from './src/screens/Launches';
-import LaunchDetail from './src/containers/LaunchDetail';
+import Launch from './src/screens/Launch';
 import Login from './src/screens/Login';
 import { resolvers, typeDefs } from './src/resolvers';
 
-let client;
+const uri = 'http://192.168.1.51:4000';
+const cache = new InMemoryCache();
+const link = new HttpLink({
+  uri,
+});
+
+const client = new ApolloClient({
+  cache,
+  link,
+  typeDefs,
+  resolvers,
+});
 
 const initApolloClient = async () => {
-  const cache = new InMemoryCache();
+  const token = await AsyncStorage.getItem('token');
 
   const link = new HttpLink({
-    uri: 'http://192.168.1.209:4000',
+    uri,
     headers: {
-      authorization: await AsyncStorage.getItem('token'),
+      authorization: token,
     },
   });
 
-  client = new ApolloClient({
-    cache,
-    link,
-    typeDefs,
-    resolvers,
-  });
-
-  cache.writeData({
+  client.cache.writeData({
     data: {
-      isLoggedIn: !!localStorage.getItem('token'),
+      isLoggedIn: !!token,
       cartItems: [],
     },
   });
+
+  client.link = link;
 };
 
-initApolloClient();
 const { Navigator, Screen } = createStackNavigator();
 
 const IS_LOGGED_IN = gql`
@@ -49,19 +54,31 @@ const IS_LOGGED_IN = gql`
   }
 `;
 
-const App = () => {
-  const { data } = useQuery(IS_LOGGED_IN);
+initApolloClient();
 
-  return (
-    <ApolloProvider client={client}>
-      <NavigationContainer>
-        <Navigator>
-          <Screen name="Home" component={data.isLoggedIn ? Launches : Login} />
-          <Screen name="LaunchDetail" component={LaunchDetail} />
-        </Navigator>
-      </NavigationContainer>
-    </ApolloProvider>
-  );
+const Pages = () => (
+  <NavigationContainer>
+    <Navigator>
+      <Screen name="Home" component={Launches} />
+      <Screen name="Launch" component={Launch} />
+      {/* <Screen name="Cart" component={Cart} />
+      <Screen name="profile" component={profile} /> */}
+    </Navigator>
+  </NavigationContainer>
+);
+
+const IsLoggedIn = () => {
+  const { data } = useQuery(IS_LOGGED_IN);
+  if (!data) {
+    return null;
+  }
+  return data.isLoggedIn ? <Pages /> : <Login />;
 };
+
+const App = () => (
+  <ApolloProvider client={client}>
+    <IsLoggedIn />
+  </ApolloProvider>
+);
 
 export default App;

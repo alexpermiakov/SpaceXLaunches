@@ -4,9 +4,9 @@ import { View, AsyncStorage } from 'react-native';
 import { decode as atob } from 'base-64';
 import { unit, colors } from '../theme';
 
-const dog1 = require('../assets/images/dog-1.png');
-const dog2 = require('../assets/images/dog-2.png');
-const dog3 = require('../assets/images/dog-3.png');
+const dog1 = require('../../assets/images/dog-1.png');
+const dog2 = require('../../assets/images/dog-2.png');
+const dog3 = require('../../assets/images/dog-3.png');
 
 const max = 25; // 25 letters in the alphabet
 const offset = 97; // letter A's charcode is 97
