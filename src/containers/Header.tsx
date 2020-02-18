@@ -46,7 +46,7 @@ const H3 = styled.Text`
   text-transform: uppercase;
 `;
 
-const Header = ({ image = '', children = 'Space Explorer' }) => {
+const Header = ({ image, children = 'Space Explorer' }: any) => {
   const [email, setEmail] = useState('');
 
   useEffect(() => {

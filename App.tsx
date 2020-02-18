@@ -15,7 +15,7 @@ import Cart from './src/screens/Cart';
 import Profile from './src/screens/Profile';
 import { resolvers, typeDefs } from './src/resolvers';
 
-const uri = 'http://192.168.44.179:4000';
+const uri = 'http://192.168.1.51:4000';
 const cache = new InMemoryCache();
 const link = new HttpLink({
   uri,

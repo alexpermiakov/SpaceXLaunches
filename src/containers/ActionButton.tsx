@@ -76,15 +76,13 @@ const ActionButton = ({ isBooked, id, isInCart }) => {
   if (error) return <CenteredText>ERROR</CenteredText>;
 
   return (
-    <div>
-      <Button onPress={() => mutate()} data-testid={'action-button'}>
-        {isBooked
-          ? 'Cancel This Trip'
-          : isInCart
-          ? 'Remove from Cart'
-          : 'Add to Cart'}
-      </Button>
-    </div>
+    <Button onPress={mutate}>
+      {isBooked
+        ? 'Cancel This Trip'
+        : isInCart
+        ? 'Remove from Cart'
+        : 'Add to Cart'}
+    </Button>
   );
 };
 

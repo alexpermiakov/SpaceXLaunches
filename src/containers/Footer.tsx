@@ -57,24 +57,24 @@ const InnerContainer = styled.View`
 `;
 
 const Footer = () => {
-  const navigation = useNavigation();
+  const { navigate } = useNavigation();
 
   return (
     <Container>
       <InnerContainer>
-        <MenuItem onPress={() => navigation.navigate('Home')}>
+        <MenuItem onPress={() => navigate('Home')}>
           <>
             <StyledHomeIcon />
             <Text>Home</Text>
           </>
         </MenuItem>
-        <MenuItem onPress={() => navigation.navigate('Cart')}>
+        <MenuItem onPress={() => navigate('Cart')}>
           <>
             <StyledCartIcon />
             <Text>Cart</Text>
           </>
         </MenuItem>
-        <MenuItem onPress={() => navigation.navigate('Profile')}>
+        <MenuItem onPress={() => navigate('Profile')}>
           <>
             <StyledProfileIcon />
             <Text>Profile</Text>

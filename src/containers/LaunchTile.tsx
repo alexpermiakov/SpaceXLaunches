@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
 import { unit } from '../theme';
 
 const galaxy = require('../../assets/images/galaxy.jpg');
@@ -17,13 +18,18 @@ const Text = styled.Text`
   /* font-family: 'sans-serif'; */
 `;
 
-const Img = styled.ImageBackground`
-  border-radius: 7px;
-  padding: ${unit * 4}px ${unit * 5}px;
+const Tile = styled.TouchableHighlight`
   height: 193px;
+  width: 100%;
   margin-top: ${padding}px;
   margin-bottom: ${padding * 2}px;
+`;
+
+const Img = styled.ImageBackground`
+  flex: 1;
+  border-radius: 7px;
   overflow: hidden;
+  padding: ${unit * 4}px ${unit * 5}px;
 `;
 
 const H3 = styled(Text)`
@@ -36,23 +42,16 @@ const H5 = styled(Text)`
   color: white;
 `;
 
-const Link = ({ id, navigation, children, ...props }) => (
-  <Img
-    {...props}
-    source={getBackgroundImage(id)}
-    onPress={() => navigation.navigate('Launch', { id })}
-  >
-    {children}
-  </Img>
-);
-
-export default ({ launch, navigation }: any) => {
-  const { id, mission, rocket } = launch;
+export default ({ launch }: any) => {
+  const { navigate } = useNavigation();
+  const { id: launchId, mission, rocket } = launch;
 
   return (
-    <Link navigation={navigation} id={id}>
-      <H3>{mission.name}</H3>
-      <H5>{rocket.name}</H5>
-    </Link>
+    <Tile onPress={() => navigate('Launch', { launchId })}>
+      <Img source={getBackgroundImage(launchId)}>
+        <H3>{mission.name}</H3>
+        <H5>{rocket.name}</H5>
+      </Img>
+    </Tile>
   );
 };

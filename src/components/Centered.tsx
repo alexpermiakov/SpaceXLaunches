@@ -11,4 +11,5 @@ export const CenteredText = styled.Text`
   align-items: center;
   justify-content: center;
   flex: 1;
+  text-align: center;
 `;

@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
+import styled from 'styled-components/native';
 import gql from 'graphql-tag';
 import { ScrollView } from 'react-native';
 import {
@@ -13,6 +14,8 @@ import Header from '../containers/Header';
 import Button from '../components/Button';
 import { Centered, CenteredText } from '../components/Centered';
 import Footer from '../containers/Footer';
+
+const StyledButton = styled(Button)``;
 
 const LAUNCH_TILE_DATA = gql`
   fragment LaunchTile on Launch {
@@ -96,9 +99,9 @@ const Launches = () => {
           <LaunchTile key={launch.id} launch={launch} />
         ))}
         {hasMore && (
-          <Button isLoading={isLoading} onPress={handleClick}>
+          <StyledButton isLoading={isLoading} onPress={handleClick}>
             Load More
-          </Button>
+          </StyledButton>
         )}
       </ScrollView>
       <Footer />
