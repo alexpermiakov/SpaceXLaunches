@@ -1,8 +1,6 @@
 import gql from 'graphql-tag';
-import { ApolloCache } from 'apollo-cache';
-import * as GetCartItemTypes from './pages/__generated__/GetCartItems';
-import * as LaunchTileTypes from './pages/__generated__/LaunchTile';
-import { Resolvers } from 'apollo-client';
+import { LaunchTile } from './screens/__generated__/LaunchTile';
+import { GET_CART_ITEMS } from './screens/Cart';
 
 export const typeDefs = gql`
   extend type Query {
@@ -19,18 +17,40 @@ export const typeDefs = gql`
   }
 `;
 
-type ResolverFn = (
-  parent: any,
-  args: any,
-  { cache }: { cache: ApolloCache<any> },
-) => any;
+export const resolvers = {
+  Launch: {
+    isInCart: (launch: LaunchTile, _, { cache }): boolean => {
+      const queryResult = cache.readQuery({
+        query: GET_CART_ITEMS,
+      });
+      if (queryResult) {
+        return queryResult.cartItems.includes(launch.id);
+      }
+      return false;
+    },
+  },
+  Mutation: {
+    addOrRemoveFromCart: (_, { id }: { id: string }, { cache }): string[] => {
+      const queryResult = cache.readQuery({
+        query: GET_CART_ITEMS,
+      });
+      if (queryResult) {
+        const { cartItems } = queryResult;
+        const data = {
+          cartItems: cartItems.includes(id)
+            ? cartItems.filter(i => i !== id)
+            : [...cartItems, id],
+        };
+        cache.writeQuery({ query: GET_CART_ITEMS, data });
+        return data.cartItems;
+      }
+      return [];
+    },
+  },
+};
 
-interface ResolverMap {
-  [field: string]: ResolverFn;
-}
-
-interface AppResolvers extends Resolvers {
-  // We will update this with our app's resolvers later
-}
-
-export const resolvers = {};
+export const schema = gql`
+  extend type Launch {
+    isInCart: Boolean!
+  }
+`;
