@@ -13,7 +13,7 @@ import Header from '../containers/Header';
 import Button from '../components/Button';
 import { Centered, CenteredText } from '../components/Centered';
 
-export const LAUNCH_TILE_DATA = gql`
+const LAUNCH_TILE_DATA = gql`
   fragment LaunchTile on Launch {
     id
     isBooked

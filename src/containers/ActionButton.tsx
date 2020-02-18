@@ -1,12 +1,37 @@
 import React from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import { GET_LAUNCH_DETAILS } from '../screens/Launch';
 import Button from '../components/Button';
 import Loading from '../components/Loading';
 import { CenteredText, Centered } from '../components/Centered';
 
-export { GET_LAUNCH_DETAILS };
+const LAUNCH_TILE_DATA = gql`
+  fragment LaunchTile on Launch {
+    id
+    isBooked
+    rocket {
+      id
+      name
+    }
+    mission {
+      name
+      missionPatch
+    }
+  }
+`;
+
+export const GET_LAUNCH_DETAILS = gql`
+  query LaunchDetails($launchId: ID!) {
+    launch(id: $launchId) {
+      site
+      rocket {
+        type
+      }
+      ...LaunchTile
+    }
+  }
+  ${LAUNCH_TILE_DATA}
+`;
 
 export const TOGGLE_CART = gql`
   mutation addOrRemoveFromCart($launchId: ID!) {

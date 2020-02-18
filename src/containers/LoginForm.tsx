@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { ScrollView } from 'react-native';
 import styled from 'styled-components/native';
 import { colors, unit } from '../theme';
 import Button from '../components/Button';
@@ -10,14 +9,18 @@ import Rocket from '../../assets/rocket.svg';
 const space = require('../../assets/images/space.jpg');
 
 const KeyboardView = styled.KeyboardAvoidingView.attrs({
-  behavior: 'padding',
+  behavior: 'position',
 })`
   flex: 1;
 `;
 
+const ScrollView = styled.ScrollView`
+  min-height: 100%;
+`;
+
 const Container = styled.View`
   align-items: center;
-  flex-grow: 1;
+  min-height: 100%;
   padding-bottom: ${unit * 6}px;
 `;
 
@@ -43,7 +46,7 @@ const StyledCurve = styled(Curve)`
   right: 0;
 `;
 
-const Space = styled.ImageBackground`
+const SpaceBackground = styled.ImageBackground`
   position: absolute;
   top: 0;
   left: 0;
@@ -65,16 +68,18 @@ const StyledRocket = styled(Rocket)`
 
 const StyledView = styled.View`
   width: 100%;
-  max-height: 406px;
+  max-height: 200px;
   padding: ${unit * 3.5}px;
   border-radius: 3px;
   box-shadow: 6px 6px 1px rgba(0, 0, 0, 0.25);
   background-color: white;
 `;
 
-const StyledInput = styled.TextInput`
+const EmailInput = styled.TextInput.attrs({
+  autoCompleteType: 'email',
+})`
   width: 100%;
-  margin-bottom: ${unit * 2}px;
+  margin-bottom: ${unit * 5}px;
   padding: ${unit * 1.25}px ${unit * 2.5}px;
   border: 1px solid ${colors.grey};
   font-size: 16px;
@@ -86,17 +91,11 @@ const StyledInput = styled.TextInput`
 const LoginForm = ({ login }) => {
   const [email, setEmail] = useState('');
 
-  const handleChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const email = (event.target as HTMLInputElement).value;
-      setEmail(email);
-    },
-    [],
-  );
+  const handleChange = useCallback(text => setEmail(text), []);
 
   const handleSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
+    e => {
+      e.preventDefault();
       login({ variables: { email } });
     },
     [email],
@@ -106,7 +105,7 @@ const LoginForm = ({ login }) => {
     <KeyboardView>
       <ScrollView>
         <Container>
-          <Space source={space} />
+          <SpaceBackground source={space} />
           <Header>
             <StyledCurve fill={colors.primary} />
             <StyledLogo fill="white" />
@@ -114,14 +113,7 @@ const LoginForm = ({ login }) => {
           <StyledRocket fill="white" />
           <H1>Space Explorer</H1>
           <StyledView>
-            <StyledInput
-              // required
-              // type="email"
-              // name="email"
-              // placeholder="Email"
-              // data-testid="login-input"
-              onChangeText={handleChange}
-            />
+            <EmailInput onChangeText={handleChange} value={email} />
             <Button onPress={handleSubmit}>Log in</Button>
           </StyledView>
         </Container>
