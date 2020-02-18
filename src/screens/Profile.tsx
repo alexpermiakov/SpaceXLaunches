@@ -1,12 +1,27 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { Centered, CenteredText } from '../components/Centered';
 import LaunchTile from '../containers/LaunchTile';
 import Loading from '../components/Loading';
 import Header from '../containers/Header';
-import { LAUNCH_TILE_DATA } from './launches';
 import { GetMyTrips } from './__generated__/GetMyTrips';
+import Footer from '../containers/Footer';
+
+const LAUNCH_TILE_DATA = gql`
+  fragment LaunchTile on Launch {
+    id
+    isBooked
+    rocket {
+      id
+      name
+    }
+    mission {
+      name
+      missionPatch
+    }
+  }
+`;
 
 export const GET_MY_TRIPS = gql`
   query GetMyTrips {
@@ -34,10 +49,11 @@ const Profile = () => {
     );
   if (error) return <CenteredText>ERROR: {error.message}</CenteredText>;
   if (!data) return <CenteredText>Not found</CenteredText>;
+
   const { me } = data;
 
   return (
-    <Fragment>
+    <>
       <Header>My Trips</Header>
       {me && me.trips.length ? (
         me.trips.map((launch: any) => (
@@ -46,7 +62,8 @@ const Profile = () => {
       ) : (
         <CenteredText>You haven't booked any trips</CenteredText>
       )}
-    </Fragment>
+      <Footer />
+    </>
   );
 };
 

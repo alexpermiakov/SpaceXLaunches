@@ -40,7 +40,7 @@ const Link = ({ id, navigation, children, ...props }) => (
   <Img
     {...props}
     source={getBackgroundImage(id)}
-    onPress={() => navigation.navigate('LaunchDetails', { id })}
+    onPress={() => navigation.navigate('Launch', { id })}
   >
     {children}
   </Img>

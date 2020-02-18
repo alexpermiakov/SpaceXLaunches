@@ -12,6 +12,7 @@ import { padding } from '../theme';
 import Header from '../containers/Header';
 import Button from '../components/Button';
 import { Centered, CenteredText } from '../components/Centered';
+import Footer from '../containers/Footer';
 
 const LAUNCH_TILE_DATA = gql`
   fragment LaunchTile on Launch {
@@ -100,6 +101,7 @@ const Launches = () => {
           </Button>
         )}
       </ScrollView>
+      <Footer />
     </>
   );
 };

@@ -8,6 +8,7 @@ import CartItem from '../containers/CartItem';
 import BookTrips from '../containers/BookTrips';
 import { Centered, CenteredText } from '../components/Centered';
 import { GetCartItems } from './__generated__/GetCartItems';
+import Footer from '../containers/Footer';
 
 export const GET_CART_ITEMS = gql`
   query GetCartItems {
@@ -41,6 +42,7 @@ const Cart = () => {
           <BookTrips cartItems={!!data ? data.cartItems : []} />
         </>
       )}
+      <Footer />
     </>
   );
 };

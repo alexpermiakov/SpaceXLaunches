@@ -48,9 +48,3 @@ export const resolvers = {
     },
   },
 };
-
-export const schema = gql`
-  extend type Launch {
-    isInCart: Boolean!
-  }
-`;

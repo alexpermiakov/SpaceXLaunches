@@ -9,6 +9,7 @@ import {
   LaunchDetails,
   LaunchDetailsVariables,
 } from '../__generated__/LaunchDetails';
+import Footer from '../containers/Footer';
 
 const Launch = ({ launchId }) => {
   const { data, loading, error } = useQuery<
@@ -34,6 +35,7 @@ const Launch = ({ launchId }) => {
       </Header>
       <LaunchDetail {...launch} />
       <ActionButton {...launch} />
+      <Footer />
     </>
   );
 };

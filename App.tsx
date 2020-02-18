@@ -11,6 +11,8 @@ import gql from 'graphql-tag';
 import Launches from './src/screens/Launches';
 import Launch from './src/screens/Launch';
 import Login from './src/screens/Login';
+import Cart from './src/screens/Cart';
+import Profile from './src/screens/Profile';
 import { resolvers, typeDefs } from './src/resolvers';
 
 const uri = 'http://192.168.44.179:4000';
@@ -61,8 +63,8 @@ const Pages = () => (
     <Navigator>
       <Screen name="Home" component={Launches} />
       <Screen name="Launch" component={Launch} />
-      {/* <Screen name="Cart" component={Cart} />
-      <Screen name="profile" component={profile} /> */}
+      <Screen name="Cart" component={Cart} />
+      <Screen name="Profile" component={Profile} />
     </Navigator>
   </NavigationContainer>
 );
