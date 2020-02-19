@@ -1,12 +1,19 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
+import styled from 'styled-components/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import gql from 'graphql-tag';
 import { Centered, CenteredText } from '../components/Centered';
 import LaunchTile from '../containers/LaunchTile';
 import Loading from '../components/Loading';
 import Header from '../containers/Header';
 import { GetMyTrips } from './__generated__/GetMyTrips';
-import Footer from '../containers/Footer';
+
+const { Navigator, Screen } = createStackNavigator();
+
+const View = styled.View`
+  margin: 24px;
+`;
 
 const LAUNCH_TILE_DATA = gql`
   fragment LaunchTile on Launch {
@@ -53,7 +60,7 @@ const Profile = () => {
   const { me } = data;
 
   return (
-    <>
+    <View>
       <Header>My Trips</Header>
       {me && me.trips.length ? (
         me.trips.map((launch: any) => (
@@ -62,9 +69,12 @@ const Profile = () => {
       ) : (
         <CenteredText>You haven't booked any trips</CenteredText>
       )}
-      <Footer />
-    </>
+    </View>
   );
 };
 
-export default Profile;
+export default () => (
+  <Navigator>
+    <Screen name="Profile" component={Profile} />
+  </Navigator>
+);

@@ -11,7 +11,6 @@ import {
   LaunchDetails,
   LaunchDetailsVariables,
 } from '../__generated__/LaunchDetails';
-import Footer from '../containers/Footer';
 
 const View = styled.View`
   margin: 24px;
@@ -45,7 +44,6 @@ const Launch = () => {
       )}
       <LaunchDetail {...launch} />
       <ActionButton {...launch} />
-      <Footer />
     </View>
   );
 };

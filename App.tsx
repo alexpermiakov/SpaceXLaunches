@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ApolloProvider, useQuery } from '@apollo/react-hooks';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -9,13 +9,19 @@ import { HttpLink } from 'apollo-link-http';
 import { AsyncStorage } from 'react-native';
 import gql from 'graphql-tag';
 import Launches from './src/screens/Launches';
-import Launch from './src/screens/Launch';
 import Login from './src/screens/Login';
 import Cart from './src/screens/Cart';
 import Profile from './src/screens/Profile';
 import { resolvers, typeDefs } from './src/resolvers';
+import {
+  StyledHomeIcon,
+  StyledCartIcon,
+  StyledProfileIcon,
+  StyledExitIcon,
+} from './src/containers/Footer';
+import { Rect } from 'react-native-svg';
 
-const uri = 'http://192.168.1.51:4000';
+const uri = 'http://192.168.44.148:4000';
 const cache = new InMemoryCache();
 const link = new HttpLink({
   uri,
@@ -48,7 +54,7 @@ const initApolloClient = async () => {
   client.link = link;
 };
 
-const { Navigator, Screen } = createStackNavigator();
+const { Navigator, Screen } = createBottomTabNavigator();
 
 const IS_LOGGED_IN = gql`
   query IsUserLoggedIn {
@@ -58,11 +64,22 @@ const IS_LOGGED_IN = gql`
 
 initApolloClient();
 
+const mapTabIcons = {
+  Home: StyledHomeIcon,
+  Cart: StyledCartIcon,
+  Profile: StyledProfileIcon,
+};
+
 const Pages = () => (
   <NavigationContainer>
-    <Navigator>
+    <Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          return React.createElement(mapTabIcons[route.name]);
+        },
+      })}
+    >
       <Screen name="Home" component={Launches} />
-      <Screen name="Launch" component={Launch} />
       <Screen name="Cart" component={Cart} />
       <Screen name="Profile" component={Profile} />
     </Navigator>

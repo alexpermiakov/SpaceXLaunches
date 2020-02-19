@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
+import { createStackNavigator } from '@react-navigation/stack';
 import styled from 'styled-components/native';
 import gql from 'graphql-tag';
 import { ScrollView } from 'react-native';
@@ -13,7 +14,7 @@ import { padding } from '../theme';
 import Header from '../containers/Header';
 import Button from '../components/Button';
 import { Centered, CenteredText } from '../components/Centered';
-import Footer from '../containers/Footer';
+import Launch from './Launch';
 
 const StyledButton = styled(Button)``;
 
@@ -44,6 +45,8 @@ const GET_LAUNCHES = gql`
   }
   ${LAUNCH_TILE_DATA}
 `;
+
+const { Navigator, Screen } = createStackNavigator();
 
 const Launches = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -104,9 +107,13 @@ const Launches = () => {
           </StyledButton>
         )}
       </ScrollView>
-      <Footer />
     </>
   );
 };
 
-export default Launches;
+export default () => (
+  <Navigator>
+    <Screen name="Launches" component={Launches} />
+    <Screen name="Launch" component={Launch} />
+  </Navigator>
+);
