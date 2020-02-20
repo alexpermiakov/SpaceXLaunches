@@ -1,7 +1,7 @@
 # SpaceXLaunches
 
-To run locally:
+## Installation
 
-1. `yarn`
-
-2. `yarn start`
+```bash
+cd npm i && npm start
+```
