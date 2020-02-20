@@ -80,6 +80,7 @@ const EmailInput = styled.TextInput.attrs({
   autoCompleteType: 'email',
   keyboardType: 'email-address',
   autoCapitalize: 'none',
+  placeholder: 'Email',
 })`
   width: 100%;
   margin-bottom: ${unit * 5}px;
