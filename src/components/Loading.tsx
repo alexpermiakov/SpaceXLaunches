@@ -8,9 +8,10 @@ const Logo = () => {
   const [rotation, setRotation] = useState(0);
 
   useEffect(() => {
-    setInterval(() => {
+    const sid = setInterval(() => {
       setRotation(rotation => rotation + 7);
-    });
+    }, 1000 / 60);
+    return () => clearInterval(sid);
   }, []);
 
   return (
