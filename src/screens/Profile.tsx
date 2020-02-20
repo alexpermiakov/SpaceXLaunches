@@ -15,6 +15,10 @@ const View = styled.View`
   margin: 24px;
 `;
 
+const Text = styled.Text`
+  text-align: center;
+`;
+
 const LAUNCH_TILE_DATA = gql`
   fragment LaunchTile on Launch {
     id
@@ -65,7 +69,7 @@ const Profile = () => {
       {me && me.trips.length ? (
         me.trips.map(launch => <LaunchTile key={launch.id} launch={launch} />)
       ) : (
-        <CenteredText>You haven't booked any trips</CenteredText>
+        <Text>You haven't booked any trips</Text>
       )}
     </View>
   );
