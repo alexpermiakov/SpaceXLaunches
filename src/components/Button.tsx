@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { colors } from '../theme';
 
 const Button = styled.TouchableOpacity`
-  width: 200px;
+  min-width: 200px;
   height: 50px;
   margin: 0 auto;
   padding: 0 32px;

@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ApolloProvider, useQuery } from '@apollo/react-hooks';
@@ -12,6 +12,7 @@ import Launches from './src/screens/Launches';
 import Login from './src/screens/Login';
 import Cart from './src/screens/Cart';
 import Profile from './src/screens/Profile';
+import Logout from './src/screens/Logout';
 import { resolvers, typeDefs } from './src/resolvers';
 import {
   StyledHomeIcon,
@@ -19,29 +20,24 @@ import {
   StyledProfileIcon,
   StyledExitIcon,
 } from './src/containers/Footer';
-import { Rect } from 'react-native-svg';
 
-const uri = 'http://192.168.44.148:4000';
-const cache = new InMemoryCache();
-const link = new HttpLink({
-  uri,
-});
+const uri = 'http://localhost:4000';
 
-const client = new ApolloClient({
-  cache,
-  link,
-  typeDefs,
-  resolvers,
-});
-
-const initApolloClient = async () => {
-  const token = await AsyncStorage.getItem('token');
-
+const makeApolloClient = token => {
   const link = new HttpLink({
     uri,
     headers: {
       authorization: token,
     },
+  });
+
+  const cache = new InMemoryCache();
+
+  const client = new ApolloClient({
+    cache,
+    link,
+    typeDefs,
+    resolvers,
   });
 
   client.cache.writeData({
@@ -51,7 +47,7 @@ const initApolloClient = async () => {
     },
   });
 
-  client.link = link;
+  return client;
 };
 
 const { Navigator, Screen } = createBottomTabNavigator();
@@ -62,12 +58,11 @@ const IS_LOGGED_IN = gql`
   }
 `;
 
-initApolloClient();
-
 const mapTabIcons = {
   Home: StyledHomeIcon,
   Cart: StyledCartIcon,
   Profile: StyledProfileIcon,
+  Logout: StyledExitIcon,
 };
 
 const Pages = () => (
@@ -82,22 +77,38 @@ const Pages = () => (
       <Screen name="Home" component={Launches} />
       <Screen name="Cart" component={Cart} />
       <Screen name="Profile" component={Profile} />
+      <Screen name="Logout" component={Logout} />
     </Navigator>
   </NavigationContainer>
 );
 
 const IsLoggedIn = () => {
   const { data } = useQuery(IS_LOGGED_IN);
-  if (!data) {
-    return null;
-  }
   return data.isLoggedIn ? <Pages /> : <Login />;
 };
 
-const App = () => (
-  <ApolloProvider client={client}>
-    <IsLoggedIn />
-  </ApolloProvider>
-);
+const Main = () => {
+  const [client, setClient] = useState(null);
 
-export default App;
+  const fetchToken = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const client = makeApolloClient(token);
+    setClient(client);
+  };
+
+  useEffect(() => {
+    fetchToken();
+  }, []);
+
+  if (!client) {
+    return null;
+  }
+
+  return (
+    <ApolloProvider client={client}>
+      <IsLoggedIn />
+    </ApolloProvider>
+  );
+};
+
+export default Main;

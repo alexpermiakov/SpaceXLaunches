@@ -12,7 +12,7 @@ import {
   LaunchDetailsVariables,
 } from '../__generated__/LaunchDetails';
 
-const View = styled.View`
+const ScrollView = styled.ScrollView`
   margin: 24px;
 `;
 
@@ -38,13 +38,13 @@ const Launch = () => {
   const { mission } = launch;
 
   return (
-    <View>
+    <ScrollView>
       {mission && (
         <Header image={{ uri: mission.missionPatch }}>{mission.name}</Header>
       )}
       <LaunchDetail {...launch} />
       <ActionButton {...launch} />
-    </View>
+    </ScrollView>
   );
 };
 

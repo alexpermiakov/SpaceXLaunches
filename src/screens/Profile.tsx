@@ -63,9 +63,7 @@ const Profile = () => {
     <View>
       <Header>My Trips</Header>
       {me && me.trips.length ? (
-        me.trips.map((launch: any) => (
-          <LaunchTile key={launch.id} launch={launch} />
-        ))
+        me.trips.map(launch => <LaunchTile key={launch.id} launch={launch} />)
       ) : (
         <CenteredText>You haven't booked any trips</CenteredText>
       )}

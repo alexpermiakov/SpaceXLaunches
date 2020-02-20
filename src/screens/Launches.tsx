@@ -95,19 +95,17 @@ const Launches = () => {
   } = data;
 
   return (
-    <>
-      <ScrollView style={{ padding }}>
-        <Header />
-        {launches.map(launch => (
-          <LaunchTile key={launch.id} launch={launch} />
-        ))}
-        {hasMore && (
-          <StyledButton isLoading={isLoading} onPress={handleClick}>
-            Load More
-          </StyledButton>
-        )}
-      </ScrollView>
-    </>
+    <ScrollView style={{ padding }}>
+      <Header />
+      {launches.map(launch => (
+        <LaunchTile key={launch.id} launch={launch} />
+      ))}
+      {hasMore && (
+        <StyledButton isLoading={isLoading} onPress={handleClick}>
+          Load More
+        </StyledButton>
+      )}
+    </ScrollView>
   );
 };
 

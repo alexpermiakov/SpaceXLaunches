@@ -16,7 +16,7 @@ export const GET_CART_ITEMS = gql`
   }
 `;
 
-const View = styled.View`
+const ScrollView = styled.ScrollView`
   margin: 24px;
 `;
 
@@ -35,20 +35,19 @@ const Cart = () => {
   if (error) return <CenteredText>ERROR: {error.message}</CenteredText>;
 
   return (
-    <View>
+    <ScrollView>
       <Header>My Cart</Header>
-      {!data || (!!data && data.cartItems.length === 0) ? (
+      {!data || data.cartItems.length === 0 ? (
         <CenteredText>No items in your cart</CenteredText>
       ) : (
         <>
-          {!!data &&
-            data.cartItems.map((launchId: any) => (
-              <CartItem key={launchId} launchId={launchId} />
-            ))}
-          <BookTrips cartItems={!!data ? data.cartItems : []} />
+          {data.cartItems.map((launchId: any) => (
+            <CartItem key={launchId} launchId={launchId} />
+          ))}
+          <BookTrips cartItems={data.cartItems} />
         </>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
