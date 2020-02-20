@@ -13,7 +13,7 @@ import {
 } from '../__generated__/LaunchDetails';
 
 const ScrollView = styled.ScrollView`
-  margin: 24px;
+  padding: 24px;
 `;
 
 const Launch = () => {

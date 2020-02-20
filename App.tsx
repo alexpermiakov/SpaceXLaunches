@@ -21,7 +21,7 @@ import {
   StyledExitIcon,
 } from './src/containers/Footer';
 
-const uri = 'http://localhost:4000';
+const uri = 'http://192.168.1.51:4000';
 
 const makeApolloClient = token => {
   const link = new HttpLink({
@@ -69,8 +69,8 @@ const Pages = () => (
   <NavigationContainer>
     <Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          return React.createElement(mapTabIcons[route.name]);
+        tabBarIcon: ({ color }) => {
+          return React.createElement(mapTabIcons[route.name], { fill: color });
         },
       })}
     >

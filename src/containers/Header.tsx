@@ -52,7 +52,7 @@ const Header = ({ image, children = 'Space Explorer' }: any) => {
   useEffect(() => {
     const fetchEmail = async () => {
       const token = await AsyncStorage.getItem('token');
-      const value = token ? atob(token) : 'alex.permyakoff@gmail.com';
+      const value = token ? atob(token) : '';
       setEmail(value);
     };
     fetchEmail();

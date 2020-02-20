@@ -1,6 +1,7 @@
-import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import React, { useCallback, useEffect } from 'react';
+import { useLazyQuery } from '@apollo/react-hooks';
 import styled from 'styled-components/native';
+import { useFocusEffect } from '@react-navigation/native';
 import gql from 'graphql-tag';
 import { createStackNavigator } from '@react-navigation/stack';
 import Header from '../containers/Header';
@@ -17,13 +18,18 @@ export const GET_CART_ITEMS = gql`
 `;
 
 const ScrollView = styled.ScrollView`
-  margin: 24px;
+  padding: 24px;
 `;
 
 const { Navigator, Screen } = createStackNavigator();
 
 const Cart = () => {
-  const { data, loading, error } = useQuery<GetCartItems>(GET_CART_ITEMS);
+  const [loadCarts, { data, loading, error }] = useLazyQuery<GetCartItems>(
+    GET_CART_ITEMS,
+  );
+
+  useFocusEffect(useCallback(loadCarts, []));
+  useEffect(loadCarts, []);
 
   if (loading)
     return (

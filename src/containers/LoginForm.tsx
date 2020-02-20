@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { Alert } from 'react-native';
 import styled from 'styled-components/native';
 import { colors, unit } from '../theme';
 import Button from '../components/Button';
@@ -77,6 +78,8 @@ const StyledView = styled.View`
 
 const EmailInput = styled.TextInput.attrs({
   autoCompleteType: 'email',
+  keyboardType: 'email-address',
+  autoCapitalize: 'none',
 })`
   width: 100%;
   margin-bottom: ${unit * 5}px;
@@ -91,11 +94,17 @@ const EmailInput = styled.TextInput.attrs({
 const LoginForm = ({ login }) => {
   const [email, setEmail] = useState('');
 
-  const handleChange = useCallback(text => setEmail(text), []);
+  const handleChange = useCallback(text => {
+    setEmail(text);
+  }, []);
 
   const handleSubmit = useCallback(
     e => {
       e.preventDefault();
+      if (!/^\S+@\S+$/.test(email)) {
+        Alert.alert('Email is not valid');
+        return;
+      }
       login({ variables: { email } });
     },
     [email],

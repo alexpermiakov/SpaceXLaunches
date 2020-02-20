@@ -1,6 +1,7 @@
-import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import React, { useCallback, useEffect } from 'react';
+import { useLazyQuery } from '@apollo/react-hooks';
 import styled from 'styled-components/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import gql from 'graphql-tag';
 import { Centered, CenteredText } from '../components/Centered';
@@ -11,8 +12,8 @@ import { GetMyTrips } from './__generated__/GetMyTrips';
 
 const { Navigator, Screen } = createStackNavigator();
 
-const View = styled.View`
-  margin: 24px;
+const ScrollView = styled.ScrollView`
+  padding: 24px;
 `;
 
 const Text = styled.Text`
@@ -48,9 +49,15 @@ export const GET_MY_TRIPS = gql`
 `;
 
 const Profile = () => {
-  const { data, loading, error } = useQuery<GetMyTrips, any>(GET_MY_TRIPS, {
-    fetchPolicy: 'network-only',
-  });
+  const [loadTrips, { data, loading, error }] = useLazyQuery<GetMyTrips, any>(
+    GET_MY_TRIPS,
+    {
+      fetchPolicy: 'network-only',
+    },
+  );
+
+  useFocusEffect(useCallback(loadTrips, []));
+  useEffect(loadTrips, []);
 
   if (loading)
     return (
@@ -64,14 +71,14 @@ const Profile = () => {
   const { me } = data;
 
   return (
-    <View>
+    <ScrollView>
       <Header>My Trips</Header>
       {me && me.trips.length ? (
         me.trips.map(launch => <LaunchTile key={launch.id} launch={launch} />)
       ) : (
         <Text>You haven't booked any trips</Text>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
