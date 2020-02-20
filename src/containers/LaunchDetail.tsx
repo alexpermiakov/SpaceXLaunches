@@ -16,7 +16,7 @@ const H5 = styled.Text`
 `;
 
 const Image = styled.ImageBackground`
-  height: 365px;
+  height: 320px;
   margin-bottom: ${unit * 4}px;
   padding: ${unit * 4}px ${unit * 5}px;
   border-radius: 7px;

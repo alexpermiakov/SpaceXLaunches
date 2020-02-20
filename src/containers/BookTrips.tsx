@@ -38,8 +38,6 @@ const BookTrips = ({ cartItems }) => {
     },
   );
 
-  console.log('cartItems', cartItems, data);
-
   return data && data.bookTrips && !data.bookTrips.success ? (
     <CenteredText>{data.bookTrips.message}</CenteredText>
   ) : (
